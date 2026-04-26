@@ -5,4 +5,5 @@ stages:
      - data/kidney_disease.csv
      - train.py
     outs:
-     - classifier.pkl
+     - models/classifier.pkl
+     - models/scaler.pkl

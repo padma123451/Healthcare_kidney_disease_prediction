@@ -205,8 +205,8 @@ accuracy_score(y_test, pred_cv)
 
 
 import joblib
-joblib.dump(model,"classifier.pkl")
-joblib.dump(scaler,"scaler.pkl")
+joblib.dump(model,"models/classifier.pkl")
+joblib.dump(scaler,"models/scaler.pkl")
 
 
 

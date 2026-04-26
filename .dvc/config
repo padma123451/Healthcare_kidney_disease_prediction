@@ -1,0 +1,4 @@
+[core]
+    remote = myremote
+['remote "myremote"']
+    url = s3://healthcare-bucket-489857930967-489857930967-ap-south-1-an/dvcstore
