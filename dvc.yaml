@@ -1,0 +1,8 @@
+stages:
+  healthcare:
+    cmd: python train.py
+    deps:
+     - data/kidney_disease.csv
+     - train.py
+    outs:
+     - classifier.pkl
