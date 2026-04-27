@@ -30,6 +30,9 @@ jobs:
             aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             aws-region: ap-south-1
 
+       - name: Test AWS Credentials
+         run: aws sts get-caller-identity
+
        - name: Pull data from DVC
          run: dvc pull
 
