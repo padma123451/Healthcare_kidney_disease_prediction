@@ -1,1 +1,7 @@
-pip install os numpy seaborn matplotlib pandas scikit-learn
+ numpy 
+ seaborn
+  matplotlib 
+  pandas 
+  scikit-learn
+  dvc[s3]
+  joblib
