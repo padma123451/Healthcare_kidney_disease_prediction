@@ -1,0 +1,31 @@
+name: CI/CD Pipieline
+
+on:
+  push:
+    branches:["main"]
+jobs:
+  build:
+     runs-on: ubuntu-latest
+     steps:
+
+    -name: Checkout code
+     uses: actions/checkout@v3
+
+    -name: Set up python
+     uses: actions/setup-python@v4
+     with:
+        python-version: 3.10
+      
+    -name: Install dependencies
+     run:
+        pip install -r requirements.txt
+        pip install dvc[s3]
+
+    -name: Pull data from DVC
+     run: dvc pull
+
+    -name: Run pipeline
+     run: dvc repro
+
+    -name: Run inference test
+     run: python inference.py
