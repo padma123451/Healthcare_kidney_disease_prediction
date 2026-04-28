@@ -1,0 +1,15 @@
+apiVersion: serving .kserve.io/V1beta1
+kind: InferenceService
+metadata:
+  name: kidney-disease-prediction
+spec: 
+  predictor:
+    minReplicas: 1
+    maxReplicas: 3
+    containers:
+     - image:
+        .dkr.ecr.ap-south1.amazonaws.com/kidney-disease-prediction
+        resources:
+          requests:
+           cpu: "500m"
+           memory: "1Gi"

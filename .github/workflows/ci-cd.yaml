@@ -22,13 +22,14 @@ jobs:
        - name: Install dependencies
          run: |
            pip install -r requirements.txt
+           pip install dvc[s3]
            
        - name: Configure AWS credentials
-         uses: aws-actions/configure-aws-credentials@v2
+         uses: aws-actions/configure-aws-credentials@v3
          with: 
             aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
             aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            aws-region: ap-south-1
+            aws-region: ${{ secrets.AWS_REGION }}
 
        - name: Test AWS Credentials
          run: aws sts get-caller-identity
@@ -37,7 +38,21 @@ jobs:
          run: dvc pull
 
        - name: Run pipeline
-         run: dvc repro
+         run: python train.py
 
-       - name: Run inference test
-         run: python inference.py
+       - name: Buid docker image
+         run: docker build -t kidney_disease_prediction
+
+       - name: Login to  AWS ECR
+         run: |
+            aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | \
+                docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
+
+       - name: Tag Docker image
+         run: |
+            docker tag kidney_disease_prediction${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/kidney_disease_prediction
+
+
+       - name: Push Docker image
+         run: |
+            docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/kidney_disease_prediction
