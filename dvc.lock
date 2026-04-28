@@ -11,12 +11,3 @@ stages:
       hash: md5
       md5: 5d0b892cb8cb2b09e2214c94ad1d51fa
       size: 5480
-    outs:
-    - path: models/classifier.pkl
-      hash: md5
-      md5: e107b51e10fdb2a5c4b95c7263ea68cb
-      size: 155977
-    - path: models/scaler.pkl
-      hash: md5
-      md5: cc5c667d5c77bf6383ac3aaa1d2204e9
-      size: 2007

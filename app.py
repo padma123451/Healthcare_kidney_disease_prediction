@@ -1,34 +1,27 @@
-import joblib
-import numpy as np
-from flask import Flask, render_template,request
 
-model = joblib.load("classifier.pkl")
-scaler = joblib.load("scaler.pkl")
+import numpy as np
+from flask import Flask,request,jsonify
+import mlflow.pyfunc
+
+model = mlflow.pyfunc.load_model(
+    "models:/kidney_disease_prediction/
+Production"
+)
 
 # init the app
 app = Flask(__name__)
 
-@app.route("/")
-def home():
-    return render_template("home.html")
-
 @app.route("/predict", methods = ["POST"])
 def predict():
     try:
-        data = [float(value) for value in request.form.values()]
+        data = request.json["data"]
         data = np.array(data).reshape(1, -1)
-        data_scaled =scaler.transform(data)
-        prediction = model.predict(data_scaled)
-        return f"Prediction: {prediction[0]}"
+        prediction = model.predict(data)
+        return jsonify({"prediction": prediction[0]})
     except Exception as e:
-        return f"Error: {e}"
-   
-
-@app.route("/contact")
-def contact():
-    return "welcome to contact page"
-
+        return jsonify({"error": str(e)})
+    
 
 # run the app
 if __name__ == "__main__":
-    app.run(debug = True)
+    app.run(host ="0.0.0.0", port = 8000)

@@ -198,15 +198,35 @@ from sklearn.ensemble import RandomForestClassifier
 model = RandomForestClassifier(max_depth=4,random_state=10)
 model.fit(x_train, y_train)
 
-
-from sklearn.metrics import accuracy_score
+import mlflow
+import mlflow.sklearn
+from sklearn.metrics import accuracy_score,  classification_report, confusion_matrix
 pred_cv = model.predict(x_test)
-accuracy_score(y_test, pred_cv)
 
 
-import joblib
-joblib.dump(model,"models/classifier.pkl")
-joblib.dump(scaler,"models/scaler.pkl")
+
+
+mlflow.set_experiment("kidney_disease_prediction")
+
+with mlflow.start_run() as run:
+    mlflow.sklearn.log_model(model,"model")
+  
+    
+    acc =accuracy_score(y_test, pred_cv)
+    mlflow.log_metric("accuracy",acc)
+
+    
+    report = classification_report(y_test, pred_cv, output_dict =True)
+    mlflow.log_dict(report, "classification_report.json")
+
+    cm = confusion_matrix(y_test, pred_cv)
+    mlflow.log_dict({"confusion_matrix": cm.tolist()}, "confusion_matrix.json")
+
+mlflow.register_model(
+    f"runs:/{run.info.run_id}/model",
+    "kidney_disease_prediction"
+) 
+
 
 
 

@@ -4,6 +4,4 @@ stages:
     deps:
      - data/kidney_disease.csv
      - train.py
-    outs:
-     - models/classifier.pkl
-     - models/scaler.pkl
+    
