@@ -7,9 +7,9 @@ spec:
     minReplicas: 1
     maxReplicas: 3
     containers:
-     - image:
-        489857930967.dkr.ecr.ap-south-1.amazonaws.com/kidney_disease_prediction
-        resources:
-          requests:
-           cpu: "500m"
-           memory: "1Gi"
+     - name: kidney_disease_prediction
+       image: 489857930967.dkr.ecr.ap-south-1.amazonaws.com/kidney_disease_prediction:latest
+       resources:
+         requests:
+          cpu: "500m"
+          memory: "1Gi"
